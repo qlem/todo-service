@@ -29,16 +29,17 @@ exports.getAll = () => Task.aggregate([
         $lookup: {
             from: 'users',
             localField: 'owner',
-            foreignField: 'id',
-            as: 'owner'
+            foreignField: '_id',
+            as: 'owner_info'
         }
+    },
+    {
+        $unwind: 'owner_info'
     },
     {
         $project: {
             title: 1,
-            owner: {
-                $arrayElemAt: ['$owner.name', 0]
-            },
+            owner: 'owner_info.name',
             creationDate: 1,
             deadline: 1,
             content: 1,

@@ -53,7 +53,15 @@ router.put('/', Auth.auth, async (req, res) => {
             res.status(400).send('Wrong or empty body')
             return
         }
-        let task = req.body.data
+        const task = req.body.data
+        if (!task.owner) {
+            const owner = await User.get({name: task.owner})
+            if (!owner) {
+                res.status(400).send('Task owner does not exist')
+                return
+            }
+            task.owner = owner._id
+        }
         const wr = await Task.update(task)
         if (wr.n !== 1) {
             res.status(400).send('Wrong task id')
