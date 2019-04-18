@@ -18,6 +18,10 @@ const taskSchema = new Schema({
     state: {
         type: String,
         default: 'pending'
+    },
+    priority: {
+        type: String,
+        default: 'medium'
     }
 })
 
@@ -34,16 +38,17 @@ exports.getAll = () => Task.aggregate([
         }
     },
     {
-        $unwind: 'owner_info'
+        $unwind: '$owner_info'
     },
     {
         $project: {
             title: 1,
-            owner: 'owner_info.name',
+            owner: '$owner_info.name',
             creationDate: 1,
             deadline: 1,
             content: 1,
-            state: 1
+            state: 1,
+            priority: 1
         }
     },
     {

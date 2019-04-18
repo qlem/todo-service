@@ -54,7 +54,7 @@ router.post('/create', bodyCheck, async (req, res) => {
         const data = req.body.data
         const user = await User.get({name: data.name})
         if (user) {
-            res.status(400).send('Username already exists')
+            res.status(400).send('User with that name already exists')
             return
         }
         const hash = bCrypt.hashSync(data.password, 8)

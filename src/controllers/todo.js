@@ -54,10 +54,10 @@ router.put('/', Auth.auth, async (req, res) => {
             return
         }
         const task = req.body.data
-        if (!task.owner) {
+        if (task.owner) {
             const owner = await User.get({name: task.owner})
             if (!owner) {
-                res.status(400).send('Task owner does not exist')
+                res.status(400).send('Given owner does not exist')
                 return
             }
             task.owner = owner._id
