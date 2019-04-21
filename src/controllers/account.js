@@ -4,6 +4,7 @@ const express = require('express')
 const bCrypt = require('bcryptjs')
 const Token = require('jsonwebtoken')
 const User = require('./../models/user')
+const Auth = require('./../middleware/authentication')
 const router = express.Router()
 const secret = 'T6Y8e7Ujk'
 
@@ -30,7 +31,19 @@ const userCheck = async (req, res, next) => {
     next()
 }
 
-router.post('/login', [bodyCheck, userCheck], async (req, res) => {
+router.get('/', Auth.auth, async (req, res) => {
+    try {
+        const docs = await User.getAllUsername()
+        res.send(docs)
+    } catch (e) {
+        res.status(500).send('Internal error')
+        console.error("Cannot get users")
+        if (e.stack)
+            console.error(e.stack)
+    }
+})
+
+router.post('/sign/in', [bodyCheck, userCheck], async (req, res) => {
     try {
         let user = req.body.data
         try {
@@ -49,7 +62,7 @@ router.post('/login', [bodyCheck, userCheck], async (req, res) => {
     }
 })
 
-router.post('/create', bodyCheck, async (req, res) => {
+router.post('/sign/up', bodyCheck, async (req, res) => {
     try {
         const data = req.body.data
         const user = await User.get({name: data.name})

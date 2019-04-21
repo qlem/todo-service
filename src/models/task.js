@@ -53,7 +53,15 @@ exports.getAll = () => Task.aggregate([
     },
     {
         $sort: {
-            deadline: -1
+            deadline: 1
+        }
+    },
+    {
+        $group : {
+            _id : "$state",
+            tasks: {
+                $push: "$$ROOT"
+            }
         }
     }
 ])

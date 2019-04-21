@@ -6,7 +6,7 @@ const router = express.Router()
 const User = require('./../models/user')
 const Auth = require('./../middleware/authentication')
 
-router.get('/', async  (req, res) => {
+router.get('/', Auth.auth, async  (req, res) => {
     try {
         let tasks
         tasks = await Task.getAll()
@@ -27,6 +27,7 @@ router.post('/', Auth.auth, async (req, res) => {
             return
         }
         let task = req.body.data
+        // TODO fix deadline time zone
         if (!task.owner) {
             task.owner = req.user._id
         } else {
