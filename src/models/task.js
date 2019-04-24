@@ -4,6 +4,9 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const ObjectId = mongoose.Schema.Types.ObjectId
 
+/**
+ * Schema that represents the task model
+ */
 const taskSchema = new Schema({
     title: String,
     owner: ObjectId,
@@ -27,7 +30,10 @@ const taskSchema = new Schema({
 
 const Task = mongoose.model('Task', taskSchema)
 
+// query used for get a task according the the filter
 exports.get = filter => Task.findOne(filter)
+
+// query used for get all tasks sorted by state and by deadline
 exports.getAll = () => Task.aggregate([
     {
         $lookup: {
@@ -65,6 +71,12 @@ exports.getAll = () => Task.aggregate([
         }
     }
 ])
+
+// query used for insert a task
 exports.add = task => Task.create(task)
+
+// query used for update a task
 exports.update = task => Task.updateOne({_id: task._id}, task)
+
+// query used for delete a task
 exports.delete = id => Task.deleteOne({_id: id})

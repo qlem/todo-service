@@ -6,6 +6,10 @@ const router = express.Router()
 const User = require('./../models/user')
 const Auth = require('./../middleware/authentication')
 
+/**
+ * GET request - full path: /todo/
+ * Route that allows to the client to fetch all available tasks. Only if the user is authenticated.
+ */
 router.get('/', Auth.auth, async  (req, res) => {
     try {
         let tasks
@@ -19,6 +23,10 @@ router.get('/', Auth.auth, async  (req, res) => {
     }
 })
 
+/**
+ * POST request - full path: /todo/
+ * Route that allows to the client to add a new task. Only if the user is authenticated.
+ */
 router.post('/', Auth.auth, async (req, res) => {
     try {
         if (!req.body.data || !req.body.data.title || !req.body.data.content
@@ -48,6 +56,10 @@ router.post('/', Auth.auth, async (req, res) => {
     }
 })
 
+/**
+ * PUT request - full path: /todo/
+ * Route that allows to the client to update a task. Only if the user is authenticated.
+ */
 router.put('/', Auth.auth, async (req, res) => {
     try {
         if (!req.body.data || !req.body.data._id) {
@@ -77,6 +89,10 @@ router.put('/', Auth.auth, async (req, res) => {
     }
 })
 
+/**
+ * DELETE request - full path: /todo/
+ * Route that allows to the client to delete a task. Only if the user is authenticated.
+ */
 router.delete('/', Auth.auth, async (req, res) => {
    try {
        if (!req.query.id) {
